@@ -3,13 +3,27 @@
 set $mod Mod4
 
 # Border size
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 1
+gaps inner 5
+gaps outer 5
+
+# FR keyboard layout
+exec --no-startup-id setxkbmap fr
 
 # Compton
 exec --no-startup-id compton
 
+# Nightshift
+exec --no-statup-id nightshift
+
 # Take screenshot
-bindsym Print exec scrot ~/Pictures/`date +%Y-%m-%d_%H:%M:%S`.png
+bindsym $mod+s exec scrot --focused ~/Pictures/`date +%Y-%m-%d_%H:%M:%S`.png
+
+# Startup sound
+exec --no-startup-id timeout 6 ffplay -nodisp .startup-sound.mp3
+
+# Lock screen
+bindsym $mod+l exec i3lock-fancy -t "C'est pas ton pc tu tu touches pas." --greyscale --desktop
 
 # Executes NetworkManager applet
 exec --no-startup-id nm-applet
@@ -18,11 +32,11 @@ exec --no-startup-id nm-applet
 exec --no-startup-id xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
 
 # retrieves wallpaper
-exec --no-startup-id nitrogen --restore
+exec --no-startup-id nitrogen --set-zoom-fill /home/thmarinho/.wp.4.jpg
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 12
+font pango:Fira code,FontAwesome 12
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -50,7 +64,7 @@ bindsym $mod+Return exec kitty
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu-run
+bindsym $mod+d exec dmenu-run -l 10
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -59,12 +73,6 @@ bindsym $mod+d exec dmenu-run
 # Backlight (increase / decrease)
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
-
-# change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -92,11 +100,6 @@ bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -189,5 +192,12 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+    position top
+    status_command i3status -c ~/.config/i3/i3status
+    font pango:Fira code, FontAwesome 12
+    colors {
+        background #2f343f
+        focused_workspace #2d343f #2d343f #ffffff
+        inactive_workspace #2d343f #2f343f #101010
+    }
 }
